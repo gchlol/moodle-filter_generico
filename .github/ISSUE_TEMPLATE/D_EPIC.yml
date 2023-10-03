@@ -17,5 +17,6 @@ body:
   attributes:
     label: Tasks
     description: "List of sub-tasks"
-    value: |
-      - [ ]
+    value: "- [ ] "
+  validations:
+    required: true
