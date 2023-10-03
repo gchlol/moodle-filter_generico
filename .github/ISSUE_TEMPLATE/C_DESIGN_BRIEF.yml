@@ -1,6 +1,6 @@
 name: "Annex C - Design Brief"
 description: New functionality or features for the plugin
-title: "[Feature] "
+title: "[Feature]"
 labels: [ "enhancement" ]
 body:
   - type: textarea

@@ -1,6 +1,6 @@
 name: "Annex A - Coding Brief"
 description: Minor modifications or features for the plugin
-title: "[Brief] "
+title: "[Brief]"
 labels: []
 body:
 - type: textarea

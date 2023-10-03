@@ -1,6 +1,6 @@
 name: "Annex B - Defect"
 description: Plugin defect or otherwise incorrect functionality
-title: "[Defect] "
+title: "[Defect]"
 labels: [ "bug" ]
 body:
 - type: dropdown
