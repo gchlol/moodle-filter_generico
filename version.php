@@ -17,7 +17,7 @@
 /**
  * Version details
  *
- * @package    filter
+ * @package    filter_generico
  * @subpackage generico
  * @copyright  2014 Justin Hunt <poodllsupport@gmail.com>
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -25,8 +25,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2024012500;        // The current plugin version (Date: YYYYMMDDXX)
-$plugin->requires = 2011070100;        // Requires this Moodle version
-$plugin->component = 'filter_generico'; // Full name of the plugin (used for diagnostics)
+$plugin->version = 2025070100;        // The current plugin version (Date: YYYYMMDDXX).
+$plugin->requires = 2022112800;        // Requires this Moodle version.
+$plugin->component = 'filter_generico'; // Full name of the plugin (used for diagnostics).
 $plugin->maturity = MATURITY_STABLE;
-$plugin->release = 'Version 1.4.20(Build 2024012500)';
+$plugin->release = 'Version 1.4.24 (Build 2025070100)';
+$plugin->supported = [401, 405];
