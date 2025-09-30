@@ -217,7 +217,7 @@ class presets_control extends \admin_setting {
         $fields['script'] = 'templatescript';
         $fields['style'] = 'templatestyle';
         $fields['dataset'] = 'dataset';
-        $fields['datavars'] = 'datavars';
+        $fields['datasetvars'] = 'datasetvars';
 
         foreach ($fields as $fieldkey => $fieldname) {
             if (array_key_exists($fieldkey, $preset)) {
