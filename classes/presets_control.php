@@ -192,6 +192,10 @@ class presets_control extends \admin_setting {
                 }
             }
         }
+        uasort(
+            $ret,
+            fn($a, $b) => strnatcasecmp($a['name'], $b['name'])
+        );
         return $ret;
     }// End of fetch presets function.
 
