@@ -16,6 +16,8 @@
 
 namespace filter_generico;
 
+use Exception;
+
 if (class_exists('\core_filters\text_filter')) {
     class_alias('\core_filters\text_filter', 'generico_base_text_filter');
 } else {
