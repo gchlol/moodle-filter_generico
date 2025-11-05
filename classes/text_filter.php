@@ -485,6 +485,8 @@ class text_filter extends \generico_base_text_filter {
                     if (count($filterprops['DATASET']) == 1) {
                         $thedata = get_object_vars(reset($alldata));
                         foreach ($thedata as $name => $value) {
+                            $value ??= '';
+
                             $genericotemplate = str_replace('@@DATASET:' . $name . '@@', $value, $genericotemplate);
                             $alternatecontent = str_replace('@@DATASET:' . $name . '@@', $value, $alternatecontent);
                         }
