@@ -464,7 +464,7 @@ class text_filter extends \generico_base_text_filter {
         $filterprops['DATASET'] = false;
         if ($datasetbody) {
             $vars = [];
-            if ($datasetvars) {
+            if ($datasetvars !== '') {
                 $vars = explode(',', $datasetvars);
             }
             // Turn numeric vars into numbers (not strings).
