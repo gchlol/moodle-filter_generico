@@ -16,6 +16,8 @@
 
 namespace filter_generico;
 
+use Exception;
+
 if (class_exists('\core_filters\text_filter')) {
     class_alias('\core_filters\text_filter', 'generico_base_text_filter');
 } else {
@@ -462,7 +464,7 @@ class text_filter extends \generico_base_text_filter {
         $filterprops['DATASET'] = false;
         if ($datasetbody) {
             $vars = [];
-            if ($datasetvars) {
+            if ($datasetvars !== '') {
                 $vars = explode(',', $datasetvars);
             }
             // Turn numeric vars into numbers (not strings).
@@ -483,6 +485,8 @@ class text_filter extends \generico_base_text_filter {
                     if (count($filterprops['DATASET']) == 1) {
                         $thedata = get_object_vars(reset($alldata));
                         foreach ($thedata as $name => $value) {
+                            $value ??= '';
+
                             $genericotemplate = str_replace('@@DATASET:' . $name . '@@', $value, $genericotemplate);
                             $alternatecontent = str_replace('@@DATASET:' . $name . '@@', $value, $alternatecontent);
                         }
