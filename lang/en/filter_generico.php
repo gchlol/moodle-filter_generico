@@ -61,6 +61,9 @@ $string['presets'] = 'Autofill template with a Preset';
 $string['presets_desc'] = 'Generico comes with some default presets you can use out of the box, or to help you get started with your own template. Choose one of those here, or just create your own template from scratch. You can export a template as a bundle by clicking on the green box above. You can import a bundle by dragging it onto the green box.';
 $string['privacy:metadata'] = 'The Generico filter plugin does not store any personal data.';
 $string['refreshtoken'] = "Refresh Cloud Poodll license information.";
+// GCHLOL: GS-679.
+$string['repositorytoken'] = 'GitHub access token';
+$string['repositorytoken_desc'] = 'Personal access token used to read presets from the templates repository. Required if the repository is private. Fine-grained tokens need <em>Contents: Read</em>.';
 $string['securityheading'] = 'Security';
 $string['template'] = 'The body of template {$a}';
 $string['template_desc'] = 'Put the template here, define variables by surrounding them with @@ marks at either e. eg @@variable@@. Be aware of potential <a href="https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html"> IDOR vulnerabilities </a> when choosing what variables to use - users can modify most variables entered here to be any value.';
@@ -70,6 +73,11 @@ $string['templatealternate_end'] = 'Alternate content end (template {$a})';
 $string['templatealternate_end_desc'] = 'Closing alternate content tags for templates that enclose user content with start and end Generico tags';
 $string['templatecount'] = 'Template Count';
 $string['templatecount_desc'] = 'The number of templates you can have. Default is 20.';
+// GCHLOL: GS-679.
+$string['templaterepository'] = 'Template repository';
+$string['templaterepository_desc'] = 'GitHub repository to source preset templates from, in <code>owner/name</code> form. Defaults to <code>gchlol/generico-templates</code>.';
+$string['templaterepositorypath'] = 'Template repository path';
+$string['templaterepositorypath_desc'] = 'Subdirectory inside the repository containing preset bundle files. Defaults to <code>export</code>.';
 $string['templatedefaults'] = 'variable defaults (template {$a})';
 $string['templatedefaults_desc'] = 'Define the defaults in comma delimited sets of name=value pairs. eg width=800,height=900,feeling=joy';
 $string['templateend'] = 'End tags(template {$a})';

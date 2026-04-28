@@ -85,7 +85,8 @@ class settingstools {
         }
 
         // Fetch preset data, just once so we do nto need to repeat the call a zillion times.
-        $presetdata = presets_control::fetch_presets();
+        // GCHLOL: GS-679.
+        $presetdata = \filter_generico\remote_presets::fetch_presets();
 
         for ($tindex = 1; $tindex <= $templatecount; $tindex++) {
 

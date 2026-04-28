@@ -65,6 +65,20 @@ if (has_capability('filter/generico:managetemplates', context_system::instance()
     $settingspage->add(new admin_setting_configtext('filter_generico/cpapisecret', get_string('cpapisecret', 'filter_generico'),
             $tokeninfo, ''));
 
+    // GCHLOL: GS-679.
+    $settingspage->add(new admin_setting_configtext('filter_generico/templaterepository',
+            get_string('templaterepository', 'filter_generico'),
+            get_string('templaterepository_desc', 'filter_generico'),
+            'gchlol/generico-templates', PARAM_RAW_TRIMMED, 40));
+    $settingspage->add(new admin_setting_configtext('filter_generico/templaterepositorypath',
+            get_string('templaterepositorypath', 'filter_generico'),
+            get_string('templaterepositorypath_desc', 'filter_generico'),
+            'export', PARAM_RAW_TRIMMED, 40));
+    $settingspage->add(new admin_setting_configpasswordunmask('filter_generico/repositorytoken',
+            get_string('repositorytoken', 'filter_generico'),
+            get_string('repositorytoken_desc', 'filter_generico'),
+            ''));
+
     // Add page to category.
     $ADMIN->add($genericocategoryname, $settingspage);
 

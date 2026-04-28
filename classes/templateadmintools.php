@@ -65,7 +65,8 @@ class templateadmintools {
             $templatekeycell = new \html_table_cell($item->templatekey);
 
             // Version cell.
-            $updateversion = presets_control::template_has_update($item->index);
+            // GCHLOL: GS-679.
+            $updateversion = \filter_generico\remote_presets::template_has_update($item->index);
             if ($updateversion) {
                 $button = new \single_button(
                         new \moodle_url($CFG->wwwroot . '/filter/generico/genericotemplatesadmin.php',
