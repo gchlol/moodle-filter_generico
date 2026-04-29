@@ -25,8 +25,6 @@
 
 namespace filter_generico;
 
-use filter_generico\constants;
-
 /**
  * Thin curl wrapper for the GitHub Contents API. Mirrors block_configurable_reports\github.
  */
@@ -39,7 +37,7 @@ class github extends \curl {
      *
      * @param array $settings curl settings
      */
-    public function __construct($settings = []) {
+    public function __construct(array $settings = []) {
         parent::__construct($settings);
 
         $token = get_config(constants::MOD_FRANKY, 'repositorytoken');
@@ -49,6 +47,8 @@ class github extends \curl {
     }
 
     /**
+     * Set the target repository.
+     *
      * @param string $repo owner/name
      */
     public function set_repo(string $repo): void {
@@ -56,6 +56,8 @@ class github extends \curl {
     }
 
     /**
+     * Set the bearer token used to authenticate API requests.
+     *
      * @param string $token GitHub PAT
      */
     public function set_token(string $token): void {

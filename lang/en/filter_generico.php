@@ -73,11 +73,6 @@ $string['templatealternate_end'] = 'Alternate content end (template {$a})';
 $string['templatealternate_end_desc'] = 'Closing alternate content tags for templates that enclose user content with start and end Generico tags';
 $string['templatecount'] = 'Template Count';
 $string['templatecount_desc'] = 'The number of templates you can have. Default is 20.';
-// GCHLOL: GS-679.
-$string['templaterepository'] = 'Template repository';
-$string['templaterepository_desc'] = 'GitHub repository to source preset templates from, in <code>owner/name</code> form. Defaults to <code>gchlol/generico-templates</code>.';
-$string['templaterepositorypath'] = 'Template repository path';
-$string['templaterepositorypath_desc'] = 'Subdirectory inside the repository containing preset bundle files. Defaults to <code>export</code>.';
 $string['templatedefaults'] = 'variable defaults (template {$a})';
 $string['templatedefaults_desc'] = 'Define the defaults in comma delimited sets of name=value pairs. eg width=800,height=900,feeling=joy';
 $string['templateend'] = 'End tags(template {$a})';
@@ -92,6 +87,11 @@ $string['templatekey_desc'] = 'The key should be one word and only contain numbe
 $string['templatename'] = 'Template Name';
 $string['templatename_desc'] = 'The name of this template.';
 $string['templatepageheading'] = 'Template: {$a}';
+// GCHLOL: GS-679.
+$string['templaterepository'] = 'Template repository';
+$string['templaterepository_desc'] = 'GitHub repository to source preset templates from, in <code>owner/name</code> form. Defaults to <code>gchlol/generico-templates</code>.';
+$string['templaterepositorypath'] = 'Template repository path';
+$string['templaterepositorypath_desc'] = 'Subdirectory inside the repository containing preset bundle files. Defaults to <code>export</code>.';
 $string['templaterequire_amd'] = 'Load via AMD';
 $string['templaterequire_amd_desc'] = 'AMD is a javascript loading mechanism. If you upload or link to javascript libraries in your template, you might have to uncheck this. It only applies if on Moodle 2.9 or greater';
 $string['templaterequire_css'] = 'Requires CSS (template {$a})';

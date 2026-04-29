@@ -26,9 +26,6 @@
 
 namespace filter_generico;
 
-use filter_generico\constants;
-use filter_generico\presets_control;
-
 /**
  * Sibling of \filter_generico\presets_control. Upstream call sites are diverted here so
  * the third-party presets_control class stays pristine and merge-clean against upstream.
@@ -42,7 +39,7 @@ class remote_presets {
      */
     public static function fetch_presets(): array {
         global $PAGE;
-        $ret = self::fetch_presets_remote();
+        $ret = static::fetch_presets_remote();
 
         $themegenericodir = $PAGE->theme->dir . '/generico';
         if (file_exists($themegenericodir)) {
@@ -50,7 +47,7 @@ class remote_presets {
                 if ($fileinfo->isDot() || $fileinfo->isDir()) {
                     continue;
                 }
-                $preset = self::decode_preset(file_get_contents($fileinfo->getPathname()));
+                $preset = static::decode_preset(file_get_contents($fileinfo->getPathname()));
                 if ($preset) {
                     $ret[] = $preset;
                 }
@@ -64,12 +61,12 @@ class remote_presets {
     /**
      * Apply newer preset to a configured template if one exists.
      *
-     * @param string $templateindex
+     * @param int $templateindex
      * @return bool true if updated
      */
-    public static function update_template($templateindex): bool {
+    public static function update_template(int $templateindex): bool {
         $key = get_config(constants::MOD_FRANKY, 'templatekey_' . $templateindex);
-        foreach (self::fetch_presets() as $preset) {
+        foreach (static::fetch_presets() as $preset) {
             if ($preset['key'] !== $key) {
                 continue;
             }
@@ -92,7 +89,7 @@ class remote_presets {
         $templatecount = get_config(constants::MOD_FRANKY, 'templatecount');
         $count = 0;
         for ($x = 1; $x <= $templatecount; $x++) {
-            if (self::update_template($x)) {
+            if (static::update_template($x)) {
                 $count++;
             }
         }
@@ -102,12 +99,12 @@ class remote_presets {
     /**
      * If the configured template has a newer preset available, return that version.
      *
-     * @param string $templateindex
+     * @param int $templateindex
      * @return string|false new version, or false when no update
      */
-    public static function template_has_update($templateindex) {
+    public static function template_has_update(int $templateindex) {
         $key = get_config(constants::MOD_FRANKY, 'templatekey_' . $templateindex);
-        foreach (self::fetch_presets() as $preset) {
+        foreach (static::fetch_presets() as $preset) {
             if ($preset['key'] !== $key) {
                 continue;
             }
@@ -170,7 +167,7 @@ class remote_presets {
             if (!is_object($fileobject) || empty($fileobject->content)) {
                 continue;
             }
-            $preset = self::decode_preset(base64_decode(str_replace("\n", '', $fileobject->content)));
+            $preset = static::decode_preset(base64_decode(str_replace("\n", '', $fileobject->content)));
             if ($preset) {
                 $ret[] = $preset;
             }
