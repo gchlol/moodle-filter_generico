@@ -24,12 +24,13 @@
 
 require_once("../../config.php");
 require_once($CFG->libdir . '/adminlib.php');
-require_once($CFG->libdir . '/filelib.php');
 
 admin_externalpage_setup('genericotemplatesadmin');
 
 // Get template to update.
 $updatetemplate = optional_param('updatetemplate', 0, PARAM_INT);
+// GCHLOL: GS-679.
+$updatepath = optional_param('path', '', PARAM_PATH);
 
 $updated = 0;
 $redirecturl = new moodle_url($CFG->wwwroot . '/filter/generico/genericotemplatesadmin.php', []);
@@ -39,7 +40,7 @@ if ($updatetemplate == -1) {
     redirect($redirecturl, get_string('templateupdated', 'filter_generico', $updated));
 } else if ($updatetemplate > 0) {
     // GCHLOL: GS-679.
-    $updated = \filter_generico\remote_presets::update_template($updatetemplate);
+    $updated = \filter_generico\remote_presets::update_template_by_path($updatetemplate, $updatepath);
     redirect($redirecturl, get_string('templateupdated', 'filter_generico', $updated));
 }
 

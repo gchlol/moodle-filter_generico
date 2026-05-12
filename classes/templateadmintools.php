@@ -66,12 +66,14 @@ class templateadmintools {
 
             // Version cell.
             // GCHLOL: GS-679.
-            $updateversion = \filter_generico\remote_presets::template_has_update($item->index);
-            if ($updateversion) {
+            $update = \filter_generico\remote_presets::find_update_for_template($item->index);
+            if ($update) {
                 $button = new \single_button(
-                        new \moodle_url($CFG->wwwroot . '/filter/generico/genericotemplatesadmin.php',
-                                ['updatetemplate' => $item->index]),
-                        get_string('updatetoversion', 'filter_generico', $updateversion));
+                        new \moodle_url($CFG->wwwroot . '/filter/generico/genericotemplatesadmin.php', [
+                                'updatetemplate' => $item->index,
+                                'path' => $update['path'],
+                        ]),
+                        get_string('updatetoversion', 'filter_generico', $update['version']));
                 $updatehtml = $OUTPUT->render($button);
                 $versioncell = new \html_table_cell($item->version . $updatehtml);
                 $haveupdates = true;

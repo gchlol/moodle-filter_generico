@@ -14,6 +14,15 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace filter_generico;
+
+use curl;
+
+defined('MOODLE_INTERNAL') || die();
+
+global $CFG;
+require_once($CFG->libdir . '/filelib.php');
+
 /**
  * GitHub API helper.
  *
@@ -22,20 +31,14 @@
  * @author     Jonas Sajonas
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-namespace filter_generico;
-
-/**
- * Thin curl wrapper for the GitHub Contents API. Mirrors block_configurable_reports\github.
- */
-class github extends \curl {
+class github extends curl {
 
     protected string $repo = '';
 
     /**
      * Auto-applies the configured token if present.
      *
-     * @param array $settings curl settings
+     * @param array $settings
      */
     public function __construct(array $settings = []) {
         parent::__construct($settings);
@@ -56,21 +59,21 @@ class github extends \curl {
     }
 
     /**
-     * Set the bearer token used to authenticate API requests.
+     * Set the bearer token.
      *
-     * @param string $token GitHub PAT
+     * @param string $token
      */
     public function set_token(string $token): void {
         $this->setHeader("Authorization: Bearer $token");
     }
 
     /**
-     * GET against the configured repo. URL is appended to /repos/<repo>.
+     * GET against /repos/<repo><url>.
      *
-     * @param string $url endpoint path beginning with /
-     * @param array $params query params
-     * @param array $options curl options
-     * @return bool|string raw response or false
+     * @param string $url
+     * @param array $params
+     * @param array $options
+     * @return bool|string
      */
     public function get($url, $params = [], $options = []) {
         return parent::get('https://api.github.com/repos/' . $this->repo . $url, $params, $options);

@@ -62,6 +62,10 @@ $string['presets_desc'] = 'Generico comes with some default presets you can use 
 $string['privacy:metadata'] = 'The Generico filter plugin does not store any personal data.';
 $string['refreshtoken'] = "Refresh Cloud Poodll license information.";
 // GCHLOL: GS-679.
+$string['repositoryerror'] = 'Could not fetch presets from the template repository: {$a}';
+$string['repositorykeymismatch'] = 'Preset key mismatch — expected "{$a->expected}", got "{$a->got}". The template configuration may have changed since the page loaded.';
+$string['repositorynotconfigured'] = 'Template repository or path setting is empty. Configure both before updating templates.';
+$string['repositorypathoutsideconfigured'] = 'Refusing to update from path "{$a}" — it is not under the configured template repository path.';
 $string['repositorytoken'] = 'GitHub access token';
 $string['repositorytoken_desc'] = 'Personal access token used to read presets from the templates repository. Required if the repository is private. Fine-grained tokens need <em>Contents: Read</em>.';
 $string['securityheading'] = 'Security';
