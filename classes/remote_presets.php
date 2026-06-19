@@ -135,7 +135,8 @@ class remote_presets {
             throw new moodle_exception('repositorypathoutsideconfigured', 'filter_generico', '', s($remotepath));
         }
 
-        $github = new github();
+        // Resolve via make_github() (not new github()) so tests can inject a stub client.
+        $github = static::make_github();
         $github->set_repo($repo);
 
         $preset = static::fetch_preset_body($github, $remotepath);
@@ -200,6 +201,15 @@ class remote_presets {
     }
 
     /**
+     * Build the GitHub client. Overridable so tests can inject a stub.
+     *
+     * @return github
+     */
+    protected static function make_github(): github {
+        return new github();
+    }
+
+    /**
      * Decode a preset bundle JSON.
      *
      * @param string $content
@@ -249,7 +259,7 @@ class remote_presets {
             return [];
         }
 
-        $github = new github();
+        $github = static::make_github();
         $github->set_repo($repo);
 
         $listing = $github->get('/contents/' . $path);
