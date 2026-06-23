@@ -84,9 +84,15 @@ class settingstools {
             $templatecount = \filter_generico\generico_utils::FILTER_GENERICO_TEMPLATE_COUNT;
         }
 
-        // Fetch preset data, just once so we do nto need to repeat the call a zillion times.
-        // GCHLOL: GS-679.
-        $presetdata = \filter_generico\remote_presets::fetch_presets();
+        // GCHLOL: GS-679. Only pull from GitHub when viewing a template page fulltree rebuilds on every settings section,
+        // so an unconditional remote fetch slows unrelated pages and fires stray failure notifications. Off-section fall
+        // back to on-disk presets (fetched once) so dropdown still populates.
+        $section = optional_param('section', '', PARAM_SAFEDIR);
+        if (strpos($section, 'filter_generico_templatepage_') === 0) {
+            $presetdata = \filter_generico\remote_presets::fetch_presets();
+        } else {
+            $presetdata = \filter_generico\presets_control::fetch_presets();
+        }
 
         for ($tindex = 1; $tindex <= $templatecount; $tindex++) {
 
