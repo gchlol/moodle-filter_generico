@@ -84,9 +84,8 @@ class settingstools {
             $templatecount = \filter_generico\generico_utils::FILTER_GENERICO_TEMPLATE_COUNT;
         }
 
-        // GCHLOL: GS-679. Only pull from GitHub when viewing a template page fulltree rebuilds on every settings section,
-        // so an unconditional remote fetch slows unrelated pages and fires stray failure notifications. Off-section fall
-        // back to on-disk presets (fetched once) so dropdown still populates.
+        // GCHLOL: Gate GitHub fetch to template-page views — fulltree rebuilds on every
+        // section, so unconditional fetch slows unrelated pages and fires stray notifications.
         $section = optional_param('section', '', PARAM_SAFEDIR);
         if (strpos($section, 'filter_generico_templatepage_') === 0) {
             $presetdata = \filter_generico\remote_presets::fetch_presets();
