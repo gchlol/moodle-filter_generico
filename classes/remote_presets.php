@@ -22,8 +22,8 @@ use DirectoryIterator;
 use moodle_exception;
 
 /**
- * Remote preset source — pulls preset bundles from a configured GitHub repository
- * instead of the on-disk filter/generico/presets directory.
+ * Remote preset source — pulls preset bundles from GitHub repository
+ * instead of filter/generico/presets directory.
  *
  * @package    filter_generico
  * @copyright  2026 Gold Coast Health
@@ -32,32 +32,32 @@ use moodle_exception;
  */
 class remote_presets {
 
-    /** Field name used to embed a preset's repo-relative path in the cached array. Stripped before persisting to plugin config. */
+    /** Field name used to embed preset's repo-relative path in cached array. Stripped before persisting to plugin config. */
     private const REMOTE_PATH_FIELD = '_remotepath';
 
-    /** Per-request memo of the fetched result, including failures (so we don't retry GitHub or spam notifications). */
-    private static ?array $perrequestmemo = null;
+    /** Per-request cache of fetched result, including failures (so we don't retry GitHub or spam notifications). */
+    private static ?array $requestcache = null;
 
     /**
-     * Fetch presets from the GitHub repo plus theme-bundled overrides.
-     * Two-level cache: per-request memo handles failures, MUC handles successes (5-min TTL).
+     * Fetch presets from GitHub repo plus overrides.
+     * Two-level cache: per-request cache handles failures, MUC handles successes (5-min TTL).
      *
-     * @return array
+     * @return array Preset bundles, sorted by name; empty on failure or no config.
      */
     public static function fetch_presets(): array {
         global $PAGE;
 
-        if (static::$perrequestmemo !== null) {
-            return static::$perrequestmemo;
+        if (static::$requestcache !== null) {
+            return static::$requestcache;
         }
 
         $cache = cache::make('filter_generico', 'presets');
         $cached = $cache->get('all');
         if ($cached !== false) {
-            return static::$perrequestmemo = $cached;
+            return static::$requestcache = $cached;
         }
 
-        $ret = static::fetch_presets_remote();
+        $presets = static::fetch_presets_remote();
 
         $themegenericodir = $PAGE->theme->dir . '/generico';
         if (file_exists($themegenericodir)) {
@@ -71,25 +71,25 @@ class remote_presets {
 
                 $preset = static::decode_preset(file_get_contents($fileinfo->getPathname()));
                 if ($preset) {
-                    $ret[] = $preset;
+                    $presets[] = $preset;
                 }
             }
         }
 
-        uasort($ret, fn($a, $b) => strnatcasecmp($a['name'], $b['name']));
+        uasort($presets, fn($a, $b) => strnatcasecmp($a['name'], $b['name']));
 
-        if (!empty($ret)) {
-            $cache->set('all', $ret);
+        if (!empty($presets)) {
+            $cache->set('all', $presets);
         }
-        return static::$perrequestmemo = $ret;
+        return static::$requestcache = $presets;
     }
 
     /**
      * Newer preset version + repo-relative path for a slot, or null. Theme-bundled
-     * presets are excluded — the per-row update button is a remote-only feature.
+     * presets are excluded — per-row update button is a remote-only feature.
      *
-     * @param int $templateindex
-     * @return array|null {version: string, path: string}
+     * @param int $templateindex Template slot index (1-based).
+     * @return array|null Newer preset as {version, path}, or null if none / up to date / theme-bundled.
      */
     public static function find_update_for_template(int $templateindex): ?array {
         $key = get_config(constants::MOD_FRANKY, 'templatekey_' . $templateindex);
@@ -113,11 +113,11 @@ class remote_presets {
     }
 
     /**
-     * Apply a specific preset to a slot. Single-file fetch — avoids the full-list sweep.
-     * Throws on hard errors (missing config, path escape, key mismatch). Returns
-     * false only for the benign "already up to date" case.
+     * Apply preset. Single-file fetch avoids full-list sweep.
+     * Throws hard errors (missing config, path escape, key mismatch). Returns
+     * false only for "already up to date" case.
      *
-     * @param int $templateindex
+     * @param int $templateindex Template slot index (1-based).
      * @param string $remotepath repo-relative path
      * @return bool true if updated, false if already current
      */
@@ -135,7 +135,7 @@ class remote_presets {
             throw new moodle_exception('repositorypathoutsideconfigured', 'filter_generico', '', s($remotepath));
         }
 
-        // Resolve via make_github() (not new github()) so tests can inject a stub client.
+        // Resolve via make_github() so tests can inject stub client.
         $github = static::make_github();
         $github->set_repo($repo);
 
@@ -161,9 +161,9 @@ class remote_presets {
     }
 
     /**
-     * Apply newer preset to a template slot.
+     * Apply newer preset to template slot.
      *
-     * @param int $templateindex
+     * @param int $templateindex Template slot index (1-based).
      * @return bool true if updated
      */
     public static function update_template(int $templateindex): bool {
@@ -185,7 +185,7 @@ class remote_presets {
     }
 
     /**
-     * Apply preset updates to every slot.
+     * Apply preset updates to all slot.
      *
      * @return int updated count
      */
@@ -201,19 +201,19 @@ class remote_presets {
     }
 
     /**
-     * Build the GitHub client. Overridable so tests can inject a stub.
+     * Build GitHub client. Overridable so tests can inject a stub.
      *
-     * @return github
+     * @return github A GitHub API client.
      */
     protected static function make_github(): github {
         return new github();
     }
 
     /**
-     * Decode a preset bundle JSON.
+     * Decode preset bundle JSON.
      *
-     * @param string $content
-     * @return array|false
+     * @param string $content Raw JSON bundle.
+     * @return array|false Decoded preset as assoc array, or false if invalid.
      */
     protected static function decode_preset(string $content) {
         $presetobject = json_decode($content);
@@ -227,9 +227,9 @@ class remote_presets {
      * Fetch and decode a single preset bundle. Surfaces GitHub error responses
      * via admin notification + dev debugging.
      *
-     * @param github $github
-     * @param string $path repo-relative path
-     * @return array|false
+     * @param github $github Configured GitHub client.
+     * @param string $path Repo-relative path to preset bundle.
+     * @return array|false Decoded preset as an assoc array, or false on error/empty.
      */
     protected static function fetch_preset_body(github $github, string $path) {
         $body = $github->get('/contents/' . $path);
@@ -247,10 +247,10 @@ class remote_presets {
     }
 
     /**
-     * Pull preset bundles from the configured repo. Each preset is tagged with its
-     * repo-relative path (see REMOTE_PATH_FIELD) so the cache is self-contained.
+     * Pull preset bundles from repo. Each preset is tagged with its
+     * repo-relative path so cache is self-contained.
      *
-     * @return array
+     * @return array Preset bundles, each tagged with its repo-relative path; empty if unconfigured.
      */
     protected static function fetch_presets_remote(): array {
         $repo = get_config(constants::MOD_FRANKY, 'templaterepository');
@@ -274,7 +274,7 @@ class remote_presets {
             return [];
         }
 
-        $ret = [];
+        $presets = [];
         foreach ($items as $item) {
             if ($item->type !== 'file') {
                 continue;
@@ -282,14 +282,14 @@ class remote_presets {
             $preset = static::fetch_preset_body($github, $item->path);
             if ($preset) {
                 $preset[self::REMOTE_PATH_FIELD] = $item->path;
-                $ret[] = $preset;
+                $presets[] = $preset;
             }
         }
-        return $ret;
+        return $presets;
     }
 
     /**
-     * Queue an admin-visible warning + dev debug message for a GitHub failure.
+     * Queue an admin-visible warning + dev debug message for GitHub failure.
      *
      * @param string $path repo-relative path that failed
      * @param string $message GitHub-supplied error message

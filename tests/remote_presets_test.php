@@ -41,17 +41,17 @@ final class remote_presets_test extends advanced_testcase {
     private const COMPONENT = 'filter_generico';
 
     /**
-     * Reset DB/config after each test and clear per-request memo so cache
-     * seeding in one test never leaks into the next.
+     * Reset DB/config after each test and clear the per-request cache so a
+     * seeded cache in one test never leaks into the next.
      */
     protected function setUp(): void {
         parent::setUp();
         require_once(__DIR__ . '/fixtures/stub_github.php');
         require_once(__DIR__ . '/fixtures/testable_remote_presets.php');
         $this->resetAfterTest();
-        $memo = new ReflectionProperty(remote_presets::class, 'perrequestmemo');
-        $memo->setAccessible(true);
-        $memo->setValue(null, null);
+        $requestcache = new ReflectionProperty(remote_presets::class, 'requestcache');
+        $requestcache->setAccessible(true);
+        $requestcache->setValue(null, null);
         testable_remote_presets::$stub = null;
     }
 
@@ -76,11 +76,11 @@ final class remote_presets_test extends advanced_testcase {
     }
 
     /**
-     * Build a minimal preset array.
+     * Build minimal preset array.
      *
      * @param string $key template key
      * @param string $version semantic version
-     * @param string|null $remotepath repo-relative path, or null for a theme-bundled preset
+     * @param string|null $remotepath repo-relative path, or null for theme-bundled preset
      * @return array
      */
     private function make_preset(string $key, string $version, ?string $remotepath = null): array {
@@ -109,7 +109,7 @@ final class remote_presets_test extends advanced_testcase {
     }
 
     /**
-     * With repo/path settings empty, a non-empty path still errors out.
+     * With repo/path settings empty, non-empty path still errors out.
      */
     public function test_update_template_by_path_requires_configuration(): void {
         set_config('templaterepository', '', self::COMPONENT);
@@ -124,7 +124,7 @@ final class remote_presets_test extends advanced_testcase {
     }
 
     /**
-     * Path-traversal guard: a path outside configured directory is refused.
+     * Path-traversal guard: path outside configured directory is refused.
      */
     public function test_update_template_by_path_blocks_path_outside_configured(): void {
         set_config('templaterepository', 'owner/repo', self::COMPONENT);
@@ -139,7 +139,7 @@ final class remote_presets_test extends advanced_testcase {
     }
 
     /**
-     * Prefix-only matches (export vs exportsneaky) must not satisfy the guard —
+     * Prefix-only matches (export vs exportsneaky) must not satisfy guard —
      * trailing slash is required.
      */
     public function test_update_template_by_path_blocks_sibling_prefix(): void {
@@ -201,7 +201,7 @@ final class remote_presets_test extends advanced_testcase {
     }
 
     /**
-     * Applying a newer preset writes mapped fields into plugin config.
+     * Applying newer preset writes mapped fields into plugin config.
      */
     public function test_update_template_applies_newer_preset(): void {
         set_config('templatekey_1', 'welcome', self::COMPONENT);

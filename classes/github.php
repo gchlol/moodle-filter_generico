@@ -36,9 +36,9 @@ class github extends curl {
     protected string $repo = '';
 
     /**
-     * Auto-applies the configured token if present.
+     * Auto-applies configured token if present.
      *
-     * @param array $settings
+     * @param array $settings cURL options forwarded to parent constructor.
      */
     public function __construct(array $settings = []) {
         parent::__construct($settings);
@@ -50,18 +50,18 @@ class github extends curl {
     }
 
     /**
-     * Set the target repository.
+     * Set target repository.
      *
-     * @param string $repo owner/name
+     * @param string $repo name
      */
     public function set_repo(string $repo): void {
         $this->repo = $repo;
     }
 
     /**
-     * Set the bearer token.
+     * Set bearer token.
      *
-     * @param string $token
+     * @param string $token GitHub access token.
      */
     public function set_token(string $token): void {
         $this->setHeader("Authorization: Bearer $token");
@@ -70,10 +70,10 @@ class github extends curl {
     /**
      * GET against /repos/<repo><url>.
      *
-     * @param string $url
-     * @param array $params
-     * @param array $options
-     * @return bool|string
+     * @param string $url Path appended to /repos/<repo> (e.g. /contents/presets).
+     * @param array $params Query parameters.
+     * @param array $options cURL options.
+     * @return bool|string Response body, or false on transport failure.
      */
     public function get($url, $params = [], $options = []) {
         return parent::get('https://api.github.com/repos/' . $this->repo . $url, $params, $options);
