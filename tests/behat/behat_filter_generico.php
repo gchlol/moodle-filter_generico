@@ -34,7 +34,7 @@ class behat_filter_generico extends behat_base {
     /**
      * Seed presets cache with single remote preset for a template slot.
      *
-     * @Given /^ generico preset cache holds key "(?P<key>[^"]*)" version "(?P<version>[^"]*)" at path "(?P<path>[^"]*)"$/
+     * @Given /^the generico preset cache holds key "(?P<key>[^"]*)" version "(?P<version>[^"]*)" at path "(?P<path>[^"]*)"$/
      *
      * @param string $key preset key
      * @param string $version preset version
