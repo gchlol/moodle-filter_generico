@@ -14,20 +14,28 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
+namespace filter_generico;
+
 /**
- * Version details
+ * Test subclass that injects a stub GitHub client via make_github() seam,
+ * so fetch/decode paths run in-process with no network.
  *
  * @package    filter_generico
- * @subpackage generico
- * @copyright  2014 Justin Hunt <poodllsupport@gmail.com>
+ * @copyright  2026 Gold Coast Health
+ * @author     Jonas Sajonas
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+class testable_remote_presets extends remote_presets {
 
-defined('MOODLE_INTERNAL') || die();
+    /** Stub returned by make_github(). */
+    public static ?github $stub = null;
 
-$plugin->version = 2025100501;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires = 2022112800;        // Requires this Moodle version.
-$plugin->component = 'filter_generico'; // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = 'Version 1.4.25 (Build 2025100501)';
-$plugin->supported = [401, 405];
+    /**
+     * Return registered stub instead of a real GitHub client.
+     *
+     * @return github
+     */
+    protected static function make_github(): github {
+        return static::$stub ?? parent::make_github();
+    }
+}

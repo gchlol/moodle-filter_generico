@@ -61,6 +61,13 @@ $string['presets'] = 'Autofill template with a Preset';
 $string['presets_desc'] = 'Generico comes with some default presets you can use out of the box, or to help you get started with your own template. Choose one of those here, or just create your own template from scratch. You can export a template as a bundle by clicking on the green box above. You can import a bundle by dragging it onto the green box.';
 $string['privacy:metadata'] = 'The Generico filter plugin does not store any personal data.';
 $string['refreshtoken'] = "Refresh Cloud Poodll license information.";
+// GCHLOL: GS-679.
+$string['repositoryerror'] = 'Could not fetch presets from the template repository: {$a}';
+$string['repositorykeymismatch'] = 'Preset key mismatch — expected "{$a->expected}", got "{$a->got}". The template configuration may have changed since the page loaded.';
+$string['repositorynotconfigured'] = 'Template repository or path setting is empty. Configure both before updating templates.';
+$string['repositorypathoutsideconfigured'] = 'Refusing to update from path "{$a}" — it is not under the configured template repository path.';
+$string['repositorytoken'] = 'GitHub access token';
+$string['repositorytoken_desc'] = 'Personal access token used to read presets from the templates repository. Required if the repository is private. Fine-grained tokens need <em>Contents: Read</em>.';
 $string['securityheading'] = 'Security';
 $string['template'] = 'The body of template {$a}';
 $string['template_desc'] = 'Put the template here, define variables by surrounding them with @@ marks at either e. eg @@variable@@. Be aware of potential <a href="https://cheatsheetseries.owasp.org/cheatsheets/Insecure_Direct_Object_Reference_Prevention_Cheat_Sheet.html"> IDOR vulnerabilities </a> when choosing what variables to use - users can modify most variables entered here to be any value.';
@@ -84,6 +91,11 @@ $string['templatekey_desc'] = 'The key should be one word and only contain numbe
 $string['templatename'] = 'Template Name';
 $string['templatename_desc'] = 'The name of this template.';
 $string['templatepageheading'] = 'Template: {$a}';
+// GCHLOL: GS-679.
+$string['templaterepository'] = 'Template repository';
+$string['templaterepository_desc'] = 'GitHub repository to source preset templates from, in <code>owner/name</code> form.';
+$string['templaterepositorypath'] = 'Template repository path';
+$string['templaterepositorypath_desc'] = 'Subdirectory inside the repository containing preset bundle files.';
 $string['templaterequire_amd'] = 'Load via AMD';
 $string['templaterequire_amd_desc'] = 'AMD is a javascript loading mechanism. If you upload or link to javascript libraries in your template, you might have to uncheck this. It only applies if on Moodle 2.9 or greater';
 $string['templaterequire_css'] = 'Requires CSS (template {$a})';

@@ -84,8 +84,14 @@ class settingstools {
             $templatecount = \filter_generico\generico_utils::FILTER_GENERICO_TEMPLATE_COUNT;
         }
 
-        // Fetch preset data, just once so we do nto need to repeat the call a zillion times.
-        $presetdata = presets_control::fetch_presets();
+        // GCHLOL: Gate GitHub fetch to template-page views — fulltree rebuilds on every
+        // section, so unconditional fetch slows unrelated pages and fires stray notifications.
+        $section = optional_param('section', '', PARAM_SAFEDIR);
+        if (strpos($section, 'filter_generico_templatepage_') === 0) {
+            $presetdata = \filter_generico\remote_presets::fetch_presets();
+        } else {
+            $presetdata = \filter_generico\presets_control::fetch_presets();
+        }
 
         for ($tindex = 1; $tindex <= $templatecount; $tindex++) {
 

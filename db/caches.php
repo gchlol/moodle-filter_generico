@@ -15,19 +15,22 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Version details
+ * Cache definitions.
  *
  * @package    filter_generico
- * @subpackage generico
- * @copyright  2014 Justin Hunt <poodllsupport@gmail.com>
+ * @copyright  2026 Gold Coast Health
+ * @author     Jonas Sajonas
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version = 2025100501;        // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires = 2022112800;        // Requires this Moodle version.
-$plugin->component = 'filter_generico'; // Full name of the plugin (used for diagnostics).
-$plugin->maturity = MATURITY_STABLE;
-$plugin->release = 'Version 1.4.25 (Build 2025100501)';
-$plugin->supported = [401, 405];
+$definitions = [
+    'presets' => [
+        'mode' => cache_store::MODE_APPLICATION,
+        'simplekeys' => true,
+        'simpledata' => true,
+        'staticacceleration' => true,
+        'ttl' => 300,
+    ],
+];

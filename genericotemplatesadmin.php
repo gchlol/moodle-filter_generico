@@ -29,14 +29,18 @@ admin_externalpage_setup('genericotemplatesadmin');
 
 // Get template to update.
 $updatetemplate = optional_param('updatetemplate', 0, PARAM_INT);
+// GCHLOL: GS-679.
+$updatepath = optional_param('path', '', PARAM_PATH);
 
 $updated = 0;
 $redirecturl = new moodle_url($CFG->wwwroot . '/filter/generico/genericotemplatesadmin.php', []);
 if ($updatetemplate == -1) {
-    $updated = \filter_generico\presets_control::update_all_templates();
+    // GCHLOL: GS-679.
+    $updated = \filter_generico\remote_presets::update_all_templates();
     redirect($redirecturl, get_string('templateupdated', 'filter_generico', $updated));
 } else if ($updatetemplate > 0) {
-    $updated = \filter_generico\presets_control::update_template($updatetemplate);
+    // GCHLOL: GS-679.
+    $updated = \filter_generico\remote_presets::update_template_by_path($updatetemplate, $updatepath);
     redirect($redirecturl, get_string('templateupdated', 'filter_generico', $updated));
 }
 
